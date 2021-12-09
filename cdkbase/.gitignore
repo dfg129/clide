@@ -9,3 +9,6 @@ cdk.out
 
 #neovim backups
 *.*~
+
+# account info
+cdk.context.json

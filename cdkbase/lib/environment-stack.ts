@@ -1,14 +1,15 @@
 import * as cdk from 'aws-cdk-lib';
-import * as ec2 from 'aws-cdk-lib';
-import * as lambda from 'aws-cdk-lib';
+import { Construct } from "constructs";
+import * as ec2 from 'aws-cdk-lib/aws-ec2';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as path from 'path';
-import {NodejsFunction} from 'aws-cdk-lib';
-import {HttpApi, HttpMethod} from 'aws-cdk-lib';
-import { LambdaProxyIntegration } from 'aws-cdk-lib';
+// import { NodejsFunction } from 'aws-lambda-nodejs';
+// import {HttpApi, HttpMe:thod} from 'aws-cdk-lib';
+// import { LambdaProxyIntegration } from 'aws-cdk-lib';
 
 
 export class EnvironmentStack extends cdk.Stack {
-  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const vpc = new ec2.Vpc(this, 'CafeVPC', {
