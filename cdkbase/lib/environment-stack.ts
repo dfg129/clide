@@ -9,10 +9,12 @@ import * as path from 'path';
 
 
 export class EnvironmentStack extends cdk.Stack {
+  public readonly vpc: ec2.Vpc;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const vpc = new ec2.Vpc(this, 'CafeVPC', {
+      this.vpc = new ec2.Vpc(this, 'CafeVPC', {
       cidr: '10.0.0.0/16',
       maxAzs: 2, 
       subnetConfiguration: [
@@ -37,17 +39,18 @@ export class EnvironmentStack extends cdk.Stack {
       }),      
     });
 
-    cdk.Aspects.of(vpc).add(new cdk.Tag('Name', 'cafe-vpc'));
+    cdk.Aspects.of(this.vpc).add(new cdk.Tag('Name', 'cafe-vpc'));
 
-    const securityGroup = new ec2.SecurityGroup(this, 'security-group-id', { vpc });
+    let sec_vpc = this.vpc;
+    const securityGroup = new ec2.SecurityGroup(this, 'security-group-id', { vpc: sec_vpc });
 
-    function tagSubnets(subnets: ec2.ISubnet[], tagName: string, tagValue: string) {
+    let tagSubnets = (subnets: ec2.ISubnet[], tagName: string, tagValue: string)  => {
       for (const subnet of subnets) {
         cdk.Aspects.of(subnet).add(new cdk.Tag(tagName, tagValue));
       }
 
-    tagSubnets(vpc.privateSubnets, 'Name', `cafe-vpc-private-`);
-    tagSubnets(vpc.privateSubnets, 'Name', `cafe-vpc-public-`);
+    tagSubnets(this.vpc.privateSubnets, 'Name', `cafe-vpc-private-`);
+    tagSubnets(this.vpc.privateSubnets, 'Name', `cafe-vpc-public-`);
   }
 
 //  const dockerfile = path.join(__dirname, "..");

@@ -1,0 +1,7 @@
+From public.ecr.aws/lambda/nodejs:14
+
+COPY app/app.js package.json ${LAMBDA_TASK_ROOT}
+
+RUN npm install
+
+CMD ["app.handler"]
